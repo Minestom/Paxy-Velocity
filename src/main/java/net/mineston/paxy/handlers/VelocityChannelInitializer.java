@@ -28,9 +28,9 @@ public class VelocityChannelInitializer extends ChannelInitializer<Channel> {
         initChannel.invoke(original, channel);
 
         PaxyProtocol encoder = new PaxyProtocol(SubProtocol.HANDSHAKE, false);
-        channel.pipeline().addBefore("minecraft-encoder", "via-encoder", new VelocityEncoderHandler(encoder));
+        channel.pipeline().addBefore("minecraft-encoder", Handlers.ENCODER, new VelocityEncoderHandler(encoder));
 
         PaxyProtocol decoder = new PaxyProtocol(SubProtocol.LOGIN, true);
-        channel.pipeline().addBefore("minecraft-decoder", "via-decoder", new VelocityDecoderHandler(decoder));
+        channel.pipeline().addBefore("minecraft-decoder", Handlers.DECODER, new VelocityDecoderHandler(decoder));
     }
 }
