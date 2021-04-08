@@ -15,8 +15,4 @@ public class PaxyProtocol extends MinecraftProtocol {
     public void setSubProtocol(SubProtocol subProtocol) {
         setSubProtocol(subProtocol, client, null);
     }
-
-    public boolean isClient() {
-        return client;
-    }
 }

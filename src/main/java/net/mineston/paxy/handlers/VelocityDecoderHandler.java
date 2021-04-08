@@ -3,13 +3,11 @@ package net.mineston.paxy.handlers;
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.github.steveice10.packetlib.packet.Packet;
-import com.github.steveice10.packetlib.tcp.io.ByteBufNetInput;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import net.mineston.paxy.utils.BufUtils;
+import net.mineston.paxy.utils.ProtocolUtils;
 
-import java.io.IOException;
 import java.util.List;
 
 public class VelocityDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
@@ -25,14 +23,7 @@ public class VelocityDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
         msg.retain();
         {
             ByteBuf packetBuf = msg.retainedSlice();
-            final int packetId = BufUtils.readVarInt(packetBuf);
-            Packet packet = protocol.createIncomingPacket(packetId);
-
-            try {
-                packet.read(new ByteBufNetInput(packetBuf));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Packet packet = ProtocolUtils.readPacket(protocol, packetBuf);
 
             System.out.println("server packet: " + packet.getClass().getSimpleName());
 
