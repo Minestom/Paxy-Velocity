@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 group 'org.example'
@@ -12,6 +13,9 @@ repositories {
         name 'velocity'
         url 'https://nexus.velocitypowered.com/repository/maven-public/'
     }
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 dependencies {
@@ -20,8 +24,15 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.netty/netty-all
     implementation group: 'io.netty', name: 'netty-all', version: '4.1.63.Final'
+
+    compile 'com.github.Steveice10:MCProtocolLib:19a928364a'
 }
 
 test {
     useJUnitPlatform()
+}
+
+shadowJar {
+    // Only merge dependencies with the 'compile' configuration
+    configurations = [project.configurations.compile]
 }

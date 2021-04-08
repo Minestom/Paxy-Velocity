@@ -1,5 +1,6 @@
 package net.mineston.paxy.handlers;
 
+import com.github.steveice10.mc.protocol.data.SubProtocol;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 
@@ -7,12 +8,10 @@ import java.lang.reflect.Method;
 
 public class VelocityChannelInitializer extends ChannelInitializer<Channel> {
     private final ChannelInitializer<?> original;
-    private final boolean clientSide;
     private static Method initChannel;
 
-    public VelocityChannelInitializer(ChannelInitializer<?> original, boolean clientSide) {
+    public VelocityChannelInitializer(ChannelInitializer<?> original) {
         this.original = original;
-        this.clientSide = clientSide;
     }
 
     static {
@@ -27,8 +26,11 @@ public class VelocityChannelInitializer extends ChannelInitializer<Channel> {
     @Override
     protected void initChannel(Channel channel) throws Exception {
         initChannel.invoke(original, channel);
-        // We need to add a separated handler because Velocity uses pipeline().get(MINECRAFT_DECODER)
-        channel.pipeline().addBefore("minecraft-encoder", "via-encoder", new VelocityEncoderHandler());
-        channel.pipeline().addBefore("minecraft-decoder", "via-decoder", new VelocityDecoderHandler());
+
+        PaxyProtocol encoder = new PaxyProtocol(SubProtocol.HANDSHAKE, false);
+        channel.pipeline().addBefore("minecraft-encoder", "via-encoder", new VelocityEncoderHandler(encoder));
+
+        PaxyProtocol decoder = new PaxyProtocol(SubProtocol.LOGIN, true);
+        channel.pipeline().addBefore("minecraft-decoder", "via-decoder", new VelocityDecoderHandler(decoder));
     }
 }
