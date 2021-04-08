@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
+import net.mineston.paxy.utils.BufUtils;
 import net.mineston.paxy.utils.PipelineUtil;
 import net.mineston.paxy.utils.ProtocolUtils;
 
@@ -33,13 +34,12 @@ public class VelocityDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
             return;
         }
 
-        msg.retain();
         {
-            ByteBuf transformedBuf = msg.copy();
+            ByteBuf transformedBuf = msg.retain();
 
             boolean needsCompress = handleCompressionOrder(ctx, transformedBuf);
-
-            Packet packet = ProtocolUtils.readPacket(protocol, transformedBuf);
+            final int packetId = BufUtils.readVarInt(transformedBuf);
+            Packet packet = ProtocolUtils.readPacket(protocol, packetId, transformedBuf);
 
             System.out.println("server packet: " + packet.getClass().getSimpleName());
 
@@ -47,14 +47,21 @@ public class VelocityDecoderHandler extends MessageToMessageDecoder<ByteBuf> {
                 protocol.setSubProtocol(SubProtocol.GAME);
             }
 
+            // TODO script transform
+
+            // TODO check if packet changed
+            ByteBuf buffer = ctx.alloc().buffer();
+            BufUtils.writeVarInt(buffer, packetId);
+            ProtocolUtils.writePacket(packet, buffer);
+            transformedBuf = buffer;
+
             if (needsCompress) {
                 recompress(ctx, transformedBuf);
                 skipDoubleTransform = true;
             }
 
+            out.add(transformedBuf);
         }
-
-        out.add(msg);
     }
 
     private boolean handleCompressionOrder(ChannelHandlerContext ctx, ByteBuf buf) throws InvocationTargetException {

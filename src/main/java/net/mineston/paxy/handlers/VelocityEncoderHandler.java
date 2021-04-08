@@ -11,6 +11,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import net.mineston.paxy.utils.BufUtils;
 import net.mineston.paxy.utils.PipelineUtil;
 import net.mineston.paxy.utils.ProtocolUtils;
 
@@ -29,34 +30,40 @@ public class VelocityEncoderHandler extends MessageToMessageEncoder<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws InvocationTargetException {
-        msg.retain();
-        {
-            ByteBuf transformedBuf = msg.copy();
+        ByteBuf transformedBuf = msg.retain();
 
-            boolean needsCompress = handleCompressionOrder(ctx, transformedBuf);
+        boolean needsCompress = handleCompressionOrder(ctx, transformedBuf);
 
-            Packet packet = ProtocolUtils.readPacket(protocol, transformedBuf);
+        final int packetId = BufUtils.readVarInt(transformedBuf);
+        Packet packet = ProtocolUtils.readPacket(protocol, packetId, transformedBuf);
 
-            System.out.println("client packet: " + packet.getClass().getSimpleName());
+        System.out.println("client packet: " + packet.getClass().getSimpleName());
 
-            if (packet instanceof HandshakePacket) {
-                HandshakePacket handshakePacket = (HandshakePacket) packet;
-                HandshakeIntent intent = handshakePacket.getIntent();
-                if (intent == HandshakeIntent.LOGIN) {
-                    protocol.setSubProtocol(SubProtocol.LOGIN);
-                } else if (intent == HandshakeIntent.STATUS) {
-                    protocol.setSubProtocol(SubProtocol.STATUS);
-                }
-            } else if (packet instanceof LoginStartPacket) {
-                protocol.setSubProtocol(SubProtocol.GAME);
+        if (packet instanceof HandshakePacket) {
+            HandshakePacket handshakePacket = (HandshakePacket) packet;
+            HandshakeIntent intent = handshakePacket.getIntent();
+            if (intent == HandshakeIntent.LOGIN) {
+                protocol.setSubProtocol(SubProtocol.LOGIN);
+            } else if (intent == HandshakeIntent.STATUS) {
+                protocol.setSubProtocol(SubProtocol.STATUS);
             }
-
-            if (needsCompress) {
-                recompress(ctx, transformedBuf);
-            }
+        } else if (packet instanceof LoginStartPacket) {
+            protocol.setSubProtocol(SubProtocol.GAME);
         }
 
-        out.add(msg);
+        // TODO script transform
+
+        // TODO check if packet changed
+        ByteBuf buffer = ctx.alloc().buffer();
+        BufUtils.writeVarInt(buffer, packetId);
+        ProtocolUtils.writePacket(packet, buffer);
+        transformedBuf = buffer;
+
+        if (needsCompress) {
+            recompress(ctx, transformedBuf);
+        }
+
+        out.add(transformedBuf);
     }
 
     private boolean handleCompressionOrder(ChannelHandlerContext ctx, ByteBuf buf) throws InvocationTargetException {
