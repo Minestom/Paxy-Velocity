@@ -38,10 +38,10 @@ public class VelocityInjector {
                 .invoke(channelInitializerHolder, new VelocityChannelInitializer(originalInitializer, false));
 
 
-        /*Object backendInitializerHolder = ReflectionUtil.invoke(connectionManager, "getBackendChannelInitializer");
+        Object backendInitializerHolder = ReflectionUtil.invoke(connectionManager, "getBackendChannelInitializer");
         ChannelInitializer backendInitializer = getBackendInitializer();
         backendInitializerHolder.getClass().getMethod("set", ChannelInitializer.class)
-                .invoke(backendInitializerHolder, new VelocityChannelInitializer(backendInitializer, true));*/
+                .invoke(backendInitializerHolder, new VelocityChannelInitializer(backendInitializer, true));
     }
 
 }
