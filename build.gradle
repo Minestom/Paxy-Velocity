@@ -1,38 +1,15 @@
-plugins {
-    id 'java'
-    id 'java-library'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
-}
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+subprojects {
+    apply plugin: 'java'
 
-repositories {
-    mavenCentral()
-    maven {
-        name 'velocity'
-        url 'https://nexus.velocitypowered.com/repository/maven-public/'
-    }
+    group 'net.minestom.paxy'
+    version '0.1.0-SNAPSHOT'
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
     repositories {
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
-}
-
-dependencies {
-    api 'com.velocitypowered:velocity-api:1.1.4-SNAPSHOT'
-    annotationProcessor 'com.velocitypowered:velocity-api:1.1.4-SNAPSHOT'
-
-    // https://mvnrepository.com/artifact/io.netty/netty-all
-    implementation group: 'io.netty', name: 'netty-all', version: '4.1.63.Final'
-
-    compile 'com.github.Steveice10:MCProtocolLib:19a928364a'
-}
-
-test {
-    useJUnitPlatform()
-}
-
-shadowJar {
-    // Only merge dependencies with the 'compile' configuration
-    configurations = [project.configurations.compile]
 }

@@ -1,4 +1,4 @@
-package net.minestom.paxy.handlers;
+package net.minestom.paxy.velocity.handlers;
 
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.data.handshake.HandshakeIntent;
@@ -11,6 +11,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import net.minestom.paxy.handlers.Handlers;
+import net.minestom.paxy.handlers.PaxyProtocol;
 import net.minestom.paxy.utils.BufUtils;
 import net.minestom.paxy.utils.PipelineUtil;
 import net.minestom.paxy.utils.ProtocolUtils;

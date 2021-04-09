@@ -1,8 +1,10 @@
-package net.minestom.paxy.handlers;
+package net.minestom.paxy.velocity.handlers;
 
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import net.minestom.paxy.handlers.Handlers;
+import net.minestom.paxy.handlers.PaxyProtocol;
 
 import java.lang.reflect.Method;
 

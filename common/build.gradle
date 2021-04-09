@@ -1,0 +1,13 @@
+plugins {
+    id 'java-library'
+}
+
+def netty_version = '4.1.63.Final'
+def pclib_version = '19a928364a'
+
+dependencies {
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    implementation "io.netty:netty-all:${netty_version}"
+
+    compile "com.github.Steveice10:MCProtocolLib:${pclib_version}"
+}
