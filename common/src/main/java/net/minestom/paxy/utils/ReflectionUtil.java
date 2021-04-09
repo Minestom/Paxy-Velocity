@@ -1,13 +1,12 @@
 package net.minestom.paxy.utils;
 
-import com.google.common.collect.Maps;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ReflectionUtil {
 
@@ -67,8 +66,8 @@ public class ReflectionUtil {
 
     public static final class ClassReflection {
         private final Class<?> handle;
-        private final Map<String, Field> fields = Maps.newConcurrentMap();
-        private final Map<String, Method> methods = Maps.newConcurrentMap();
+        private final Map<String, Field> fields = new ConcurrentHashMap<>();
+        private final Map<String, Method> methods = new ConcurrentHashMap<>();
 
         public ClassReflection(Class<?> handle) {
             this(handle, true);
