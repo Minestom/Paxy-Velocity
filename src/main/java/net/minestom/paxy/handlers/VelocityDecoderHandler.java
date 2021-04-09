@@ -1,4 +1,4 @@
-package net.mineston.paxy.handlers;
+package net.minestom.paxy.handlers;
 
 import com.github.steveice10.mc.protocol.data.SubProtocol;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
@@ -8,9 +8,9 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import net.mineston.paxy.utils.BufUtils;
-import net.mineston.paxy.utils.PipelineUtil;
-import net.mineston.paxy.utils.ProtocolUtils;
+import net.minestom.paxy.utils.BufUtils;
+import net.minestom.paxy.utils.PipelineUtil;
+import net.minestom.paxy.utils.ProtocolUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

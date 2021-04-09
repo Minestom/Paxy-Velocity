@@ -1,4 +1,4 @@
-package net.mineston.paxy;
+package net.minestom.paxy;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;

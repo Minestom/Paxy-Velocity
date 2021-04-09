@@ -1,10 +1,10 @@
-package net.mineston.paxy.utils;
+package net.minestom.paxy.utils;
 
 import com.github.steveice10.packetlib.packet.Packet;
 import com.github.steveice10.packetlib.tcp.io.ByteBufNetInput;
 import com.github.steveice10.packetlib.tcp.io.ByteBufNetOutput;
 import io.netty.buffer.ByteBuf;
-import net.mineston.paxy.handlers.PaxyProtocol;
+import net.minestom.paxy.handlers.PaxyProtocol;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

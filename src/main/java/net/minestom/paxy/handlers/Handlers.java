@@ -1,4 +1,4 @@
-package net.mineston.paxy.handlers;
+package net.minestom.paxy.handlers;
 
 public class Handlers {
 

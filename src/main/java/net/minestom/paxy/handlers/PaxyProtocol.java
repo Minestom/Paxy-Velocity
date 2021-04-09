@@ -1,4 +1,4 @@
-package net.mineston.paxy.handlers;
+package net.minestom.paxy.handlers;
 
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.data.SubProtocol;

@@ -1,4 +1,4 @@
-package net.mineston.paxy.utils;
+package net.minestom.paxy.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

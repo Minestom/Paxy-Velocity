@@ -1,8 +1,8 @@
-package net.mineston.paxy;
+package net.minestom.paxy;
 
 import io.netty.channel.ChannelInitializer;
-import net.mineston.paxy.handlers.VelocityChannelInitializer;
-import net.mineston.paxy.utils.ReflectionUtil;
+import net.minestom.paxy.handlers.VelocityChannelInitializer;
+import net.minestom.paxy.utils.ReflectionUtil;
 
 import java.lang.reflect.Method;
 
